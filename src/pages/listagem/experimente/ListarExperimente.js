@@ -1,33 +1,39 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./ListarExperimente.module.scss";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ListarExperimente = () => {
     const navigation = useNavigate();
+    const [dados, setDados] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const usuariosFake = [
-        {
-            nomeCompleto: "Lenilson Lima Pantoja",
-            razaoSocial: "Lenilson Lima",
-            cnpj: "04688508212",
-            email: "lenilsonlm.pantoja@gmail.com",
-            whatsapp: "67982143134",
-        },
-        {
-            nomeCompleto: "Maria Silva",
-            razaoSocial: "Maria Comércio",
-            cnpj: "12345678000199",
-            email: "maria.silva@gmail.com",
-            whatsapp: "67991234567",
-        },
-        {
-            nomeCompleto: "João Santos",
-            razaoSocial: "João Serviços",
-            cnpj: "98765432000188",
-            email: "joao.santos@gmail.com",
-            whatsapp: "67999887766",
-        },
-    ];
-
+    useEffect(() => {
+        handleDados();
+    }, []);
+    const handleDados = async () => {
+        try {
+            setLoading(true);
+            const requestOptions = {
+                headers: { 'Content-Type': 'application/json' }
+            };
+            const response = await axios.get('https://api-integracao-n8n.vercel.app/n8n', requestOptions);
+            setDados(response.data.registros);
+        } catch (error) {
+            setDados([]);
+            alert('Erro ao buscar dados, tente novamente.');
+            console.log(error.response.data);
+        } finally {
+            setLoading(false);
+        }
+    }
+    if (loading) {
+        return (
+            <div style={{ height: '100vh', width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <p>Buscando Dados...</p>
+            </div>
+        )
+    }
     return (
         <div className={styles.listar_experimente}>
             <h2>Listagem de Usuários</h2>
@@ -42,13 +48,13 @@ const ListarExperimente = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {usuariosFake.map((usuario, index) => (
+                    {dados?.map((item, index) => (
                         <tr key={index}>
-                            <td>{usuario.nomeCompleto}</td>
-                            <td>{usuario.razaoSocial}</td>
-                            <td>{usuario.cnpj}</td>
-                            <td>{usuario.email}</td>
-                            <td>{usuario.whatsapp}</td>
+                            <td>{item.nomecompleto}</td>
+                            <td>{item.razaosocial}</td>
+                            <td>{item.cnpj}</td>
+                            <td>{item.email}</td>
+                            <td>{item.whatsapp}</td>
                         </tr>
                     ))}
                 </tbody>

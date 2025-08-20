@@ -1,9 +1,11 @@
 import axios from "axios";
 import styles from "./Experimente.module.scss";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Experimente = () => {
     const navigation = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -11,20 +13,29 @@ const Experimente = () => {
         const formValues = Object.fromEntries(formData);
 
         try {
+            setLoading(true);
             const webhookUrl = 'https://gesistemas.app.n8n.cloud/webhook-test/webhook-gesistemas';
-
             const requestOptions = {
                 headers: { 'Content-Type': 'application/json' }
             };
-
             const response = await axios.post(webhookUrl, formValues, requestOptions)
             console.log('Sucesso:', response?.data);
             alert('Seu pedido de demonstração foi enviado com sucesso!');
         } catch (error) {
             console.error('Erro:', error.response?.data);
             alert('Ocorreu um erro ao enviar o formulário. Tente novamente mais tarde.');
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div style={{ height: '100vh', width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <p>Enviando Dados...</p>
+            </div>
+        )
+    }
 
     return (
         <form className={styles.experimente} onSubmit={handleSubmit}>
