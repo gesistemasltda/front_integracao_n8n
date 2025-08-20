@@ -1,0 +1,54 @@
+.listar_experimente {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    h2 {
+        color: #333;
+        margin: 0px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e9e9e9;
+        }
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: .5s ease-in-out;
+        background-color: rgb(7, 119, 7);
+
+        &:hover {
+            background-color: rgb(6, 82, 6);
+            ;
+        }
+    }
+}
